@@ -1,0 +1,32 @@
+[
+  {
+    "id": "c92422dcd9db529c494c",
+    "title": "Arroz",
+    "description": "Hola esto es una descripcion del producto",
+    "price": 300,
+    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
+    "code": 3000,
+    "stock": 50,
+    "path": "./files/products.json"
+  },
+  {
+    "id": "d5872669300c35a948a0",
+    "title": "Leche",
+    "description": "Hola esto es una descripcion del producto",
+    "price": 500,
+    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
+    "code": 1000,
+    "stock": 20,
+    "path": "./files/products.json"
+  },
+  {
+    "id": "5433ba3d99f1c9261130",
+    "title": "Pan",
+    "description": "Hola esto es una descripcion del producto",
+    "price": 1000,
+    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
+    "code": 7000,
+    "stock": 10,
+    "path": "./files/products.json"
+  }
+]
