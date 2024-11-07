@@ -27,6 +27,7 @@ export const addProduct = async (prod) => {
 
     } catch (error) {
         console.error('Error al guardar el producto:', error);
+        throw new Error('No se pudo guardar el producto.')
     }
 };
 

@@ -28,5 +28,15 @@
     "code": 7000,
     "stock": 10,
     "path": "./files/products.json"
+  },
+  {
+    "id": "207996882ef2062e0f0c",
+    "title": "Corazon",
+    "description": "Hola esto es una descripcion del producto",
+    "price": 5000000,
+    "thumbnail": "Un Thumbnail",
+    "code": 10000000,
+    "stock": 70,
+    "path": "./files/products.json"
   }
 ]
