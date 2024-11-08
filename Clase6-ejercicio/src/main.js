@@ -33,7 +33,7 @@ app.post('/api/createProduct', async (req, res) => {
     let data = req.body
 
     if (!data.title || !data.description || !data.price || !data.thumbnail || !data.code || !data.stock) {
-        return res.status(400).send({ status: "error", message: "Incomplete values" })    
+        return res.status(404).send({ status: "error", message: "Falta algun valor" })    
         //Si alguno de los datos no está, no crea el producto
     }
 
@@ -41,7 +41,7 @@ app.post('/api/createProduct', async (req, res) => {
         if (data) {
             const productCreated = new ProductManager(data) //Crea la entidad del producto
             await addProduct(productCreated)   //Agrega el producto
-            res.status(201).send({ status: "success", message: `Product created with id: ${productCreated.id}` }) //Devuelve el succes de creado
+            res.status(201).send({ status: "success", message: `Producto creado con el id: ${productCreated.id}` }) //Devuelve el succes de creado
         }
     } catch (error) {
         console.error(error);
@@ -55,6 +55,7 @@ app.post('/api/createProduct', async (req, res) => {
 
 app.get('/api/products', async (req, res) => {
     res.json(await getProducts(RUTA));   // Devolver los productos en formato JSON
+    //No uso el try-catch ya que devuelve un [] si hay un error.
 });
 
 
