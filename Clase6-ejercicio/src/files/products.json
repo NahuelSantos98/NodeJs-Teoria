@@ -1,42 +1,32 @@
 [
   {
-    "id": "c92422dcd9db529c494c",
-    "title": "Arroz",
-    "description": "Hola esto es una descripcion del producto",
-    "price": 300,
-    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
-    "code": 3000,
+    "id": "c4fc06b3016c30cc4b68",
+    "title": "Pan",
+    "description": "Esto es una descripcion del producto",
+    "price": 5000,
+    "thumbnail": "Thumbnail",
+    "code": 8905,
     "stock": 50,
     "path": "./files/products.json"
   },
   {
-    "id": "d5872669300c35a948a0",
+    "id": "421610b695ffa2ec6ca5",
     "title": "Leche",
-    "description": "Hola esto es una descripcion del producto",
-    "price": 500,
-    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
-    "code": 1000,
-    "stock": 20,
+    "description": "Esto es una descripcion del producto",
+    "price": 5000,
+    "thumbnail": "Thumbnail",
+    "code": 8905,
+    "stock": 50,
     "path": "./files/products.json"
   },
   {
-    "id": "5433ba3d99f1c9261130",
-    "title": "Pan",
-    "description": "Hola esto es una descripcion del producto",
-    "price": 1000,
-    "thumbnail": "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg",
-    "code": 7000,
-    "stock": 10,
-    "path": "./files/products.json"
-  },
-  {
-    "id": "207996882ef2062e0f0c",
-    "title": "Corazon",
-    "description": "Hola esto es una descripcion del producto",
-    "price": 5000000,
-    "thumbnail": "Un Thumbnail",
-    "code": 10000000,
-    "stock": 70,
+    "id": "374d50bbbbe27d7ca087",
+    "title": "Arroz",
+    "description": "Utilicé el PUT para probar el cambio de descripcion usando este endpoint",
+    "price": 5000,
+    "thumbnail": "Thumbnail",
+    "code": 8905,
+    "stock": 50,
     "path": "./files/products.json"
   }
 ]

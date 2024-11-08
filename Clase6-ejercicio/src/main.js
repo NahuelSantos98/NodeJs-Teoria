@@ -1,7 +1,7 @@
 import express from 'express';
 import { promises as fs } from 'node:fs';
 import { ProductManager } from './entity/ProductManager.js';
-import { addProduct, getProducts, getProductById } from './utils/methods.js';
+import { addProduct, getProducts, getProductById, putProduct, deleteProduct } from './utils/methods.js';
 
 const app = express();
 const PORT = 8080;
@@ -11,13 +11,11 @@ app.use(express.json()) //USAR PARA RECIBIR JSON
 app.use(express.urlencoded({extended: true}))
 
 
-const createFile = async (ruta, prod) => {
+const createFile = async (ruta) => {
     try {
-        // Verificar si el archivo existe
         await fs.access(ruta);
     } catch {
-        // Si no existe, lo crea e inserta el primer producto
-        await fs.writeFile(ruta, JSON.stringify([prod], null, 2)); // Crear el archivo con el primer producto
+        await fs.writeFile(ruta, "");
     }
 };
 
@@ -31,11 +29,11 @@ const createFile = async (ruta, prod) => {
 
 
 
-app.post('/createProduct', async (req, res) => {
+app.post('/api/createProduct', async (req, res) => {
     let data = req.body
 
     if (!data.title || !data.description || !data.price || !data.thumbnail || !data.code || !data.stock) {
-        return res.status(400).send({ status: "error", error: "Incomplete values" })    
+        return res.status(400).send({ status: "error", message: "Incomplete values" })    
         //Si alguno de los datos no está, no crea el producto
     }
 
@@ -43,11 +41,11 @@ app.post('/createProduct', async (req, res) => {
         if (data) {
             const productCreated = new ProductManager(data) //Crea la entidad del producto
             await addProduct(productCreated)   //Agrega el producto
-            res.send({ status: "success", message: "Product created" }) //Devuelve el succes de creado
+            res.status(201).send({ status: "success", message: `Product created with id: ${productCreated.id}` }) //Devuelve el succes de creado
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send({ status: "error", error: error.message }); //Envia el error 500 si algo sale mal
+        res.status(500).send({ status: "error", message: error.message }); //Envia el error 500 si algo sale mal
     }
 })
 
@@ -55,7 +53,7 @@ app.post('/createProduct', async (req, res) => {
 
 
 
-app.get('/products', async (req, res) => {
+app.get('/api/products', async (req, res) => {
     res.json(await getProducts(RUTA));   // Devolver los productos en formato JSON
 });
 
@@ -63,26 +61,56 @@ app.get('/products', async (req, res) => {
 
 
 
-app.get('/product/:id', async (req, res) => {
+app.get('/api/product/:id', async (req, res) => {
     const prodId = req.params.id;
     try {
         const productFound = await getProductById(prodId, RUTA);
         res.json(productFound);  // Si lo encuentra, devuelve el producto
     } catch (error) {
         console.error(error);
-        res.status(404).json({ message: error.message });  // Responde con un error 404 y el mensaje
+        res.status(404).json({status: "error", message: error.message });  // Responde con un error 404 y el mensaje
+    }
+});
+
+app.put('/api/putProduct', async (req, res) => {
+    const data = req.body;
+
+    if (!data || !data.id) {
+        return res.status(400).json({ status: "error", message: "El id o la data no fueron otorgadas" });
+    }
+
+    try {
+        const modifiedProduct = await putProduct(data, RUTA);   
+        //Agarra el producto modificado retornado
+        res.json({ status: "success", product: modifiedProduct });
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({ status: "error", message: error.message });
     }
 });
 
 
+app.delete('/api/deleteProduct/:id', async(req, res) => {
+    let idProduct = req.params.id   //Agarra del param el id
+
+    if (!idProduct) {
+        return res.status(400).json({ status: "error", message: "No se pasó el id en la url" })
+    }
+
+    try {
+        await deleteProduct(idProduct, RUTA)
+        res.status(200).json({status: "success", message: "Producto eliminado"})
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({status: "error", message: error.message})
+    }
+})
 
 
 
-let prod1 = new ProductManager("Arroz", "Hola esto es una descripcion del producto", 300, "https://www.artesust.com.ar/ImageSabrinaRecortadas/Esencia/Esencia1.jpg", 3000, 50);
-
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
     // Crear el archivo con el primer producto si no existe
-    await createFile(RUTA, prod1);
+    createFile(RUTA)
     console.log("Server on port http://localhost:8080/");
 });
 
