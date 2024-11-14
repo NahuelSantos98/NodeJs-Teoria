@@ -1,0 +1,14 @@
+<div>
+    <h1>Bienvenido {{user.userName}}</h1>
+    {{#if isAdmin}}
+        {{#each products}}
+            <div>
+                <h3>{{name}}</h3>
+                <p>${{price}}</p>
+            </div>
+        {{/each}}
+    {{else}}
+        <p>No tienes permiso para ver los productos</p>
+    {{/if}}
+</div>
+<script src="/static/js/index.js"></script>
