@@ -5,7 +5,7 @@ const app = express()
 const PORT = 8080
 
 app.use(express.json()) //El servidor puede recibir JSON al momento de las peticiones
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true })) //Parsea los cuerpos de solicitud de formulario
 //Permite a Express analizar los datos en el cuerpo de las solicitudes y los hace accesibles en req.body
 
 let products = [] //Almacena productos

@@ -4,7 +4,7 @@ import { ProductManager } from './entity/ProductManager.js';
 import { addProduct, getProducts, getProductById, putProduct, deleteProduct } from './utils/methods.js';
 
 const app = express();
-const PORT = 8080;
+const PORT = 8081;
 const RUTA = './files/products.json';
 
 app.use(express.json()) //USAR PARA RECIBIR JSON
