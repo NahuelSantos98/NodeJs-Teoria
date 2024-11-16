@@ -4,11 +4,10 @@ import productRouter from './routes/productos.routes.js'
 import multerRouter from './routes/imagenes.routes.js'
 import handlebars from 'express-handlebars'
 import viewsRouter from './routes/views.routes.js'
+import path from 'path'
 
 const app = express()
 const PORT = 8080
-
-
 
 
 app.use(express.json()) 
@@ -22,7 +21,7 @@ app.use('/views', viewsRouter)
 
 app.engine('handlebars', handlebars.engine()) //Inicializa el motor de handlbars.
 
-app.set('views', __dirname+'/views') //Asigna el lugar de donde va a sacar las vistas.
+app.set('views', path.join(__dirname, '/views')) //Asigna el lugar de donde va a sacar las vistas.
 
 app.set('view engine', 'handlebars') //Setea el USO de handlebars. Se usa el alias designado previo a la ruta.
 
