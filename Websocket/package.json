@@ -1,5 +1,5 @@
 {
-  "name": "node-pre-entrega",
+  "name": "motores-de-plantilla",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "express": "^4.21.1",
     "express-handlebars": "^8.0.1",
-    "socket.io": "^4.8.1",
-    "uuid": "^11.0.3"
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.1"
   }
 }
