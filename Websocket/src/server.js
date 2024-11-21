@@ -27,7 +27,7 @@ app.use(express.urlencoded({extended: true}))
 //Inicializa el motor handlebars
 app.engine('handlebars', handlebars.engine())
 //Setea las views que se van a usar (De dónde las saca...)
-app.set('views', path.join(__dirname, '/views'))
+app.set('views', path.join(__dirname, '../views'));
 //Setea el USO de handlebars. Se usa el alias designado previo a la ruta.
 app.set('view engine', 'handlebars')
 
