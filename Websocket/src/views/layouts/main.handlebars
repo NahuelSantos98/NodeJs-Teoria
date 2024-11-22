@@ -4,12 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Cargar archivo CSS -->
+    <link rel="stylesheet" href="/public/css/index.css"> 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css" rel="stylesheet">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="/static/css/{{style}}">
 </head>
 
 <body>
-    {{{body}}}
+    {{>header}}  <!-- Incluir el header -->
+    {{{body}}}   <!-- Renderizar el contenido principal -->
+    {{>footer}}  <!-- Incluir el footer -->
+
+    <!-- Cargar librerías externas -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <!-- Cargar Socket.IO desde el servidor Express -->
+    <script src="/socket.io/socket.io.js"></script>  <!-- Esto debe cargarse antes de index.js -->
+    <!-- Cargar archivo index.js, ahora después de socket.io.js -->
+    <script src="/public/js/index.js"></script>  
 </body>
 
 </html>
