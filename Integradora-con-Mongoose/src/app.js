@@ -1,5 +1,5 @@
 import express from 'express';
-import productRouter from './routes/producto.routes.js';
+import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
 import { create } from 'express-handlebars';
 import path from 'path';
@@ -8,18 +8,17 @@ import viewsRouter from './routes/views.routes.js';
 import { Server } from 'socket.io';
 import fs from 'fs/promises';
 import Product from './entity/Product.js';
-import connectToDatabase from './utils/connectDB.js';
-
+import connectionDataBase from './utils/connectDb.js'; //Se importa para poder conectar al servidor con la BBDD
 
 const app = express();
 const PORT = 8080;
 const hdbs = create();
 
-
-const httpServer = app.listen(PORT, () => {
+const httpServer = app.listen(PORT, async() => {
     console.log(`Server listening on port http://localhost:${PORT}/`);
-    connectToDatabase()
+    connectionDataBase() //Se utiliza al levantar el servidor
 });
+
 
 const socketServer = new Server(httpServer);
 
