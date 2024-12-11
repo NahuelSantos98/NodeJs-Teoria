@@ -3,13 +3,13 @@ import Cart from '../entity/Cart.js'
 import mongoose from 'mongoose';
 
 
-export const getAllCarts = async(req, res)=>{
+export const getAllCarts = async (req, res) => {
     try {
         const data = await cartModel.find();
-        res.status(200).json({success: true, data: data, message: 'Carts obtained successfully'})
+        res.status(200).json({ success: true, data: data, message: 'Carts obtained successfully' })
     } catch (e) {
         console.error('An error occurred', e);
-        res.status(500).json({success: false, error: e.message, message: 'An error occurred while retrieving products'});
+        res.status(500).json({ success: false, error: e.message, message: 'An error occurred while retrieving products' });
     }
 }
 
@@ -100,10 +100,10 @@ export const addProductToCart = async (req, res) => {
             //Consulto si el producto existe o no en el carrito
             const index = cartFound.products.findIndex(p => p.prodId == prodId)
 
-            if(index != -1) {
+            if(index != -1) {//findIndex devuelve -1 si no lo encuentra
                 cartFound.products[index].quantity = quantity //Actualizo cantidad
             } else {
-                cartFound.products.push({ prodId: prodId, quantity: quantity}) //Creo el producto
+                cartFound.products.push({ prodId, quantity: quantity}) //Creo el producto
             }
 
             const response = await cartModel.findByIdAndUpdate(cartId, cartFound, {new: true}) //Guardando los cambios
@@ -127,6 +127,6 @@ export const deleteCartById = async (req, res) => {
         res.status(200).json({ success: true, data: {}, message: `Cart with id: ${cartId} has been deleted` })
     } catch (e) {
         console.error('An error occurred', e);
-        res.status(500).json({ success: false, error: e.message, message: 'An error occurred while creating the Cart' });
+        res.status(500).json({ success: false, error: e.message, message: 'An error occurred while deleting the Cart' });
     }
 }

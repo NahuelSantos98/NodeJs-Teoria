@@ -6,6 +6,13 @@ export const getAllProducts = async(req, res)=>{
         let limit = parseInt(req.query.limit) || 10;
         if (limit <= 0) limit = 10;
         const data = await productModel.find().limit(limit);
+        if(!data.length){
+            return res.status(404).json({
+                success: false,
+                message: `No products found`,
+                error: "No products found"
+            });
+        }
         res.status(200).json({success: true, data: data, message: 'Products obtained successfully'})
     } catch (e) {
         console.error('An error occurred', e);
@@ -57,10 +64,10 @@ export const modifyProductById = async(req, res)=>{
         let updatedProduct = req.body
 
         if(!prodId){
-            return res.status(404).json({success: false, error: "The Product Id must be provided" ,message: "The Product Id must be provided"})
+            return res.status(400).json({success: false, error: "The Product Id must be provided" ,message: "The Product Id must be provided"})
         }
         if(!updatedProduct){
-            return res.status(404).json({success: false, error: "At least one field is required to modify a product" ,message: "At least one field is required to modify a product"})
+            return res.status(400).json({success: false, error: "At least one field is required to modify a product" ,message: "At least one field is required to modify a product"})
         }
 
         const response = await productModel.findByIdAndUpdate(prodId, updatedProduct, { new: true });
@@ -69,7 +76,7 @@ export const modifyProductById = async(req, res)=>{
         res.status(200).json({success: true, data: response ,message: "Product modified successfully"})
     } catch (e) {
         console.error('An error occurred', e);
-        res.status(500).json({success: false, error: e.message, message: 'An error occurred while creating the product'});
+        res.status(500).json({success: false, error: e.message, message: 'An error occurred while modifying the product'});
     }
 }
 
@@ -77,7 +84,7 @@ export const deleteProductById = async(req, res)=>{
     try {
         let prodId = req.params.pid
         if(!prodId){
-            return res.status(404).json({success: false, error: "The Product Id must be provided" ,message: "The Product Id must be provided"})
+            return res.status(400).json({success: false, error: "The Product Id must be provided" ,message: "The Product Id must be provided"})
         }
         
         const response = await productModel.findByIdAndDelete(prodId)
@@ -85,6 +92,36 @@ export const deleteProductById = async(req, res)=>{
         res.status(200).json({ success: true, data: {}, message: `Product with id: ${prodId} has been deleted` })
     } catch (e) {
         console.error('An error occurred', e);
-        res.status(500).json({success: false, error: e.message, message: 'An error occurred while creating the product'});
+        res.status(500).json({success: false, error: e.message, message: 'An error occurred while deleting the product'});
+    }
+}
+
+export const getAllProductsByCategory = async(req, res)=>{
+    try {
+        const {category} = req.body
+
+        if (!category || typeof category !== "string" || !category.trim()) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid category",
+                message: "The category must be a non-empty string."
+            });
+        }
+
+        const response = await productModel.find({category: category.trim()})
+
+        if (!response.length) {
+            return res.status(404).json({
+                success: false,
+                message: `No products found for category: ${category}`,
+                error: `No products found for category: ${category}`
+            });
+        }
+
+        res.status(200).json({success: true, data: response, message:`Products with category: ${category}, obtained successfully`})
+
+    } catch (e) {
+        console.error('An error occurred', e);
+        res.status(500).json({success: false, error: e.message, message: 'An error occurred while retrieving products by category.'});
     }
 }
