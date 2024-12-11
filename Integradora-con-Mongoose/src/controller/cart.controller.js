@@ -38,7 +38,12 @@ export const getCartById = async (req, res) => {
             return res.status(400).json({ success: false, error: "The id is undefined", message: "The Cart id must be provided" })
         }
 
-        const cartFound = await cartModel.findById(cartId);
+        // const cartFound = await cartModel.findById(cartId).populate('products.prodId'); 
+        //Se va a usar el products.prodId para obtener el producto ENTERO, ya que es COMO se encuentra y donde esta puesta la ref.
+
+        const cartFound = await cartModel.findOne(cartId); 
+        //No se usa FindById para que se pueda usar el middleware
+        //Funciona con el middleware configurado en el Schema.
 
         if (!cartFound) {
             return res.status(404).json({ success: false, error: `Cart with id: ${cartId} not found`, message: `Cart with id: ${cartId} not found` })
@@ -91,7 +96,8 @@ export const addProductToCart = async (req, res) => {
             return res.status(400).json({ success: false, error: "Invalid quantity", message: "Quantity must be a positive number" });
         }
 
-        const cartFound = await cartModel.findById(cartId)
+        const cartFound = await cartModel.findById(cartId) 
+        //Se sigue usando el findById para que no me traiga TODO/S los productos y sea menos pesada la request
 
         if (!cartFound) {
             return res.status(404).json({ success: false, error: "The Cart Id must be provided", message: `Cart with id: ${cartId} not found` });

@@ -13,6 +13,7 @@ const productSchema = new Schema({
         type: String,
         required: true,
         unique: true, 
+        index:true //Está indexado, por lo cual va a ser mas facil la busqeuda por este parametro
     },
     price: {
         type: Number,
@@ -30,6 +31,7 @@ const productSchema = new Schema({
     category: {
         type: String,
         required: true,
+        index:"text" //Está indexado, por lo cual va a ser mas facil la busqeuda por este parametro
     },
     thumbnails: {
         default: []
