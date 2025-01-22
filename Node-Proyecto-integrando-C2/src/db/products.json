@@ -1,0 +1,101 @@
+[
+  {
+    "id": "5c135534-5bed-4f68-8d0d-01ce88b87afc",
+    "title": "Durazno",
+    "description": "Durazno description",
+    "code": "A123B",
+    "price": 9500,
+    "status": true,
+    "stock": 20,
+    "category": "Frutas",
+    "thumbnails": []
+  },
+  {
+    "id": "a34bb44b-b79a-4064-b725-b00f446f1abb",
+    "title": "Tonica",
+    "description": "Tonica description",
+    "code": "B123C",
+    "price": 10500,
+    "status": true,
+    "stock": 25,
+    "category": "Bebidas",
+    "thumbnails": []
+  },
+  {
+    "id": "3edc996b-e27e-4570-a133-62cc6996d69d",
+    "title": "Jugo",
+    "description": "Jugo description",
+    "code": "BE432",
+    "price": 2500,
+    "status": true,
+    "stock": 10,
+    "category": "Bebidas",
+    "thumbnails": []
+  },
+  {
+    "id": "10c2b336-9833-4ce7-a919-e52d20b0f170",
+    "title": "Aceite",
+    "description": "Aceite description",
+    "code": "QF519",
+    "price": 9000,
+    "status": true,
+    "stock": 30,
+    "category": "Alimento",
+    "thumbnails": []
+  },
+  {
+    "id": "6498ebf9-a329-4959-a61e-088a924b6ad7",
+    "title": "Chupetin",
+    "description": "Chupetin description",
+    "code": "RF875",
+    "price": 100,
+    "status": true,
+    "stock": 60,
+    "category": "Golosinas",
+    "thumbnails": []
+  },
+  {
+    "id": "e4eccd2c-7a0c-480c-bee3-83f81ec6bb65",
+    "title": "Chocolate",
+    "description": "Chocolate description",
+    "code": "AD692",
+    "price": 1500,
+    "status": true,
+    "stock": 25,
+    "category": "Golosinas",
+    "thumbnails": []
+  },
+  {
+    "id": "9a264cc4-188d-4ab6-9cae-d987cbf2d46d",
+    "title": "Agua",
+    "description": "Agua description",
+    "code": "AW234",
+    "price": 1000,
+    "status": true,
+    "stock": 12,
+    "category": "Bebidas",
+    "thumbnails": []
+  },
+  {
+    "id": "194e41f9-2ccb-4cc2-acff-27e3a15462a4",
+    "title": "Manzana",
+    "description": "Manzana Description",
+    "code": "WR234",
+    "price": 150,
+    "status": true,
+    "stock": 30,
+    "category": "Frutas",
+    "thumbnails": []
+  },
+  {
+    "id": "80651178-53e4-490f-93d1-b836dd827f94",
+    "title": "Prod2",
+    "description": "Block es una marca de chocolates conocida por su textura cremosa y sabor clásico. Ideal para disfrutar y compartir.",
+    "code": "JBD105",
+    "price": 20,
+    "status": true,
+    "stock": 25,
+    "category": "Golosinas",
+    "thumbnails": []
+  }
+]

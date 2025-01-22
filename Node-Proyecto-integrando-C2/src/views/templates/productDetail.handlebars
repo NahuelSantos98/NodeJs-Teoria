@@ -1,0 +1,14 @@
+<section>
+    <h1>Product Detail</h1>
+    <article class="productCard-container">
+            <div class="productCard">
+                <h3>{{response.title}}</h3>
+                <p>{{response.description}}</p>
+                <p>Price: ${{response.price}}</p>
+                <p>Stock: {{response.stock}}</p>
+                <p>Category: {{response.category}}</p>
+                <p>Code: {{response.code}}</p>
+                <p>Status: {{#if response.status}}Available{{else}}Out of stock{{/if}}</p>
+            </div>
+    </article>
+</section>

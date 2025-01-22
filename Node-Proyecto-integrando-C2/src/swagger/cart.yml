@@ -1,0 +1,180 @@
+components:
+  schemas:
+    SimpleCart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The auto-generated MongoDB ObjectId
+          example: "507f1f77bcf86cd799439011"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              prodId:
+                type: string
+                example: "507f1f77bcf86cd799439012"
+              quantity:
+                type: number
+                example: 2
+    PopulatedCart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The auto-generated MongoDB ObjectId
+          example: "507f1f77bcf86cd799439011"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              prodId:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: The auto-generated MongoDB ObjectId
+                    example: "507f1f77bcf86cd799439012"
+                  title:
+                    type: string
+                    example: "Product Title"
+                  description:
+                    type: string
+                    example: "Product Description"
+                  price:
+                    type: number
+                    example: 100
+              quantity:
+                type: number
+                example: 2
+
+tags:
+  - name: Carts
+    description: Cart management
+
+paths:
+  /api/carts:
+    get:
+      summary: Get all carts
+      tags: [Carts]
+      responses:
+        '200':
+          description: A list of carts
+        '500':
+          description: Internal Server Error
+    post:
+      summary: Create a new cart
+      tags: [Carts]
+      responses:
+        '201':
+          description: Cart created
+        '400':
+          description: Bad Request - All fields are required
+        '500':
+          description: Internal Server Error
+
+  /api/carts/{cid}:
+    get:
+      summary: Get a cart by ID
+      tags: [Carts]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A cart object
+        '400':
+          description: Bad Request - The Cart id must be provided
+        '404':
+          description: Not Found - Cart with id not found
+        '500':
+          description: Internal Server Error
+    put:
+      summary: Update a cart by ID
+      tags: [Carts]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cart updated
+        '400':
+          description: Bad Request - The Cart id must be provided
+        '404':
+          description: Not Found - Cart with id not found
+        '500':
+          description: Internal Server Error
+    delete:
+      summary: Delete a cart by ID
+      tags: [Carts]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cart deleted
+        '400':
+          description: Bad Request - The Cart id must be provided
+        '404':
+          description: Not Found - Cart with id not found
+        '500':
+          description: Internal Server Error
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Add a product to a cart
+      tags: [Carts]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product added to cart
+        '400':
+          description: Bad Request - Invalid parameters or quantity
+        '404':
+          description: Not Found - Cart or Product not found
+        '500':
+          description: Internal Server Error
+    delete:
+      summary: Remove a product from a cart
+      tags: [Carts]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Product removed from cart
+        '400':
+          description: Bad Request - Invalid parameters
+        '404':
+          description: Not Found - Cart or Product not found
+        '500':
+          description: Internal Server Error

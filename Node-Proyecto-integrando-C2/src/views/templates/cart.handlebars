@@ -1,0 +1,17 @@
+<section>
+    <h1>Cart</h1>
+    <article class="productCard-container">
+        {{#each productsCart}}
+            <div class="productCard linkDetail">
+                <h3>{{prodId.title}}</h3>
+                <p>{{prodId.description}}</p>
+                <p>Price: ${{prodId.price}}</p>
+                <p>Stock: {{prodId.stock}}</p>
+                <p>Category: {{prodId.category}}</p>
+                <p>Code: {{prodId.code}}</p>
+                <p>Status: {{#if prodId.status}}Available{{else}}Out of stock{{/if}}</p>
+                <a href="http://localhost:8080/views/products/{{prodId._id}}"><button>Go to detail</button></a>
+            </div>
+        {{/each}}
+    </article>
+</section>
