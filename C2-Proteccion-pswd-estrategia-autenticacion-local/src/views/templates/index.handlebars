@@ -1,0 +1,28 @@
+<section>
+    <h1>Products</h1>
+    <article class="productCard-container">
+        {{#each products}}
+            <div class="productCard">
+                <h3>{{title}}</h3>
+                <p>{{description}}</p>
+                <p>Price: ${{price}}</p>
+                <p>Stock: {{stock}}</p>
+                <p>Category: {{category}}</p>
+                <p>Code: {{code}}</p>
+                <p>Status: {{status}}</p>
+                <button>Agregar Carrito</button>
+                <a href="http://localhost:8080/views/products/{{_id}}"><button>Go to detail</button></a>
+            </div>
+        {{/each}}
+    </article>
+
+    <nav class="pagination">
+        {{#if hasPrevPage}}
+            <a href="{{prevLink}}" class="pagination-link">Previous</a>
+        {{/if}}
+        {{#if hasNextPage}}
+            <a href="{{nextLink}}" class="pagination-link">Next</a>
+        {{/if}}
+    </nav>
+</section>
+

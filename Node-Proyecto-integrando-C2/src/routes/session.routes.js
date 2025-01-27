@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, authEndpoint, authAdminEndpoint } from "../controllers/sessionMemory.controller.js";
+import { login, authEndpoint, authAdminEndpoint } from "../controllers/sessionFiles.controller.js";
 import { isAdmin } from "../middlewares/isAdmin.handler.js";
 import { validateSession } from "../middlewares/validateSession.handler.js";
 
