@@ -49,6 +49,7 @@ app.use(session({ //Maneja las sesiones
     saveUninitialized: true
 }));
 
+//Passport SIEMPRE ANTES de las rutas
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())

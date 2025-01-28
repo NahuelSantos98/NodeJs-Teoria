@@ -18,7 +18,7 @@ const initializePassport = ()=>{  //Inicializa Passport
             let user = await userModel.findOne({email: username}) //Busca en la BBDD
             if(user){
                 console.log('User Exists');
-                return done(null, false) 
+                return done(null, false, {message: 'User already exists'}) 
                 //done recibe parametros: done(error, user, info)
                 //null = no hubo error      |  false: Proceso de registro fallido pq ya existe el usuario
             }
@@ -54,11 +54,11 @@ const initializePassport = ()=>{  //Inicializa Passport
 
             if(!user){
                 console.log('User does not exist');
-                return done(null, false)
+                return done(null, false, {message: 'User does not exists'})
             }
 
             if(!isValidPassword(user, password)){ //Si no es valido = error
-                return done(null, false)
+                return done(null, false, {message: 'No valid User'})
             }
 
             return done(null, user) //Es valido, retorna el usuario

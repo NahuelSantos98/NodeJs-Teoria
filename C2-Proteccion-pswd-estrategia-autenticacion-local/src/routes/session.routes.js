@@ -2,8 +2,9 @@ import { Router } from "express";
 import { login, authEndpoint, authAdminEndpoint } from "../controllers/sessionFiles.controller.js";
 import { isAdmin } from "../middlewares/isAdmin.handler.js";
 import { validateSession } from "../middlewares/validateSession.handler.js";
-import passport from "passport";
-import { failLoginEndpoint, failRegisterEndpoint, loginEndpoint, logout, registerEndpoint } from "../controllers/sessionClase3.controller.js";
+import { passportCall } from "../middlewares/passportCall.js";
+import { failLoginEndpoint, failRegisterEndpoint, loginEndpoint, logout, privateEndpoint, registerEndpoint } from "../controllers/sessionClase3.controller.js";
+import { isAuth } from "../middlewares/isAuthenticated.js";
 
 const sessionRouter = Router();
 
@@ -14,9 +15,20 @@ sessionRouter.get('/secret-endpoint', validateSession, authEndpoint); //Se agreg
 sessionRouter.get('/admin-endpoint', validateSession, isAdmin, authAdminEndpoint);
 
 //Clase 3
-sessionRouter.post('/register', passport.authenticate('register', { failureRedirect: '/failregister' }), registerEndpoint);
+sessionRouter.post('/register', 
+    // passport.authenticate('register', { failureRedirect: '/failregister' }),  //Solo por endpoint y estrategia. 
+    // Para generalizar se puede usar un middleware y no tener que estar pendiente a la estrategia.
+    passportCall('register'), //Middleware
+    registerEndpoint);
 
-sessionRouter.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), loginEndpoint);
+sessionRouter.post(
+    '/login',     
+    // passport.authenticate('login', { failureRedirect: '/faillogin' }), //Solo por endpoint y estrategia. 
+    // Para generalizar se puede usar un middleware y no tener que estar pendiente a la estrategia.
+    passportCall('login'), //Middleware
+    loginEndpoint);
+
+sessionRouter.get('/private-endpoint', isAuth ,privateEndpoint)
 
 sessionRouter.post('/logout', logout);
 
