@@ -1,79 +1,92 @@
-import passport from 'passport'
-import local from 'passport-local'
-import jwt, { ExtractJwt } from 'passport-jwt'
-import {createHash, isValidPassword} from '../utils/configPassword.js'
-import userModel from '../models/user.model.js'
+import passport from 'passport';
+import local from 'passport-local';
+import jwt from 'passport-jwt';
+import { createHash } from '../utils/configPassword.js';
+import userModel from '../models/user.model.js';
+import dotenv from 'dotenv'
 
-const LocalStrategy = local.Strategy //Crea estrategia local para register
-const JWTEstrategy = jwt.Strategy //Crea estrategia con jwt.
-const JWTExtract = jwt.ExtractJwt //Crea para obtener el jwt.
+dotenv.config()
 
-const cookieExtractor = (req)=>{
-    let token = null
-    if(req && req.headers){
-        token = req.headers.authorization.split(' ')[1]
-        //El formato Authorization es: "Bearer <TOKEN>", por eso lo corta en el  ' '
+const LocalStrategy = local.Strategy; // Crea estrategia local para registro
+const JWTEstrategy = jwt.Strategy; // Crea estrategia con JWT.
+const JWTExtract = jwt.ExtractJwt; // Crea para extraer el JWT.
+
+const cookieExtractor = (req) => {
+    let token = null;
+    if (req && req.headers) {
+        token = req.headers.authorization?.split(' ')[1]; // Usa optional chaining en lugar de condicional
+        // El formato Authorization es: "Bearer <TOKEN>", por eso lo corta en el ' '
     }
-    return token
-}
+    return token;
+};
 
-const initializePassport = ()=>{
+const initializePassport = () => {
 
+    // Estrategia para el registro de usuario
     passport.use('register', new LocalStrategy({
-        passReqToCallback: true, //permite recibir el objeto req del enpoint en la configuración para poder obtener la info completa.\  
-        usernameField: 'email' //Este parámetro especifica el nombre del campo en el formulario que se utilizará como "username" para la autenticación.
-    }, async(req, username, password, done)=>{
-        const {first_name, last_name, email, age } = req.body
-    
+        passReqToCallback: true, // Permite recibir el objeto req en la estrategia
+        usernameField: 'email', // Usa 'email' como el campo para autenticación
+    }, async (req, username, password, done) => {
+        const { first_name, last_name, email, age } = req.body;
+
         try {
-            let user = await userModel.findOne({email: username})
-    
-            if(!user){ //Si el usuario no se encuentra
+            let user = await userModel.findOne({ email: username });
+
+            if (!user) { // Si el usuario no existe
+                // Crear un nuevo usuario
                 const newUser = {
                     first_name,
-                    last_name, 
+                    last_name,
                     email,
                     age,
-                    password : createHash(password)
-                }
-    
-                let result = await userModel.create(newUser) //Lo crea
-    
-                // Crea el token al haberse registrado
-                // El rol está por default en "user"
-                const token = jwt.sign({ email: result.email, id: result._id, role: result.role, password: result.password }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    
-                // Ahora devuelves el token generado al usuario en la respuesta
-                return done(null, { user: result, token }); // Devolvemos el usuario con el token
+                    password: createHash(password), // Crea el hash de la contraseña
+                };
+
+                let result = await userModel.create(newUser); // Guardar el nuevo usuario en la base de datos
+
+                // Crea un token JWT para el nuevo usuario
+                const token = jwt.sign({
+                    email: result.email,
+                    id: result._id,
+                    role: result.role || 'user', // Asigna rol 'user' por defecto si no existe
+                    password: result.password,
+                }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+                // Devuelve el usuario junto con el token
+                return done(null, { user: result, token });
             }
-    
-            console.log('User Exists'); //Sino el usuario ya existe.
-            return done(null, false, {message: 'User already exists'}) 
+
+            console.log('User exists'); // El usuario ya existe
+            return done(null, false, { message: 'User already exists' });
+
         } catch (e) {
-            return done("Error while registering the user" + e)
+            return done("Error while registering the user" + e); // Manejo de errores
         }
-    }))
-    
+    }));
 
-    passport.serializeUser((user, done)=>{
-        done(null, user._id) //Guarda SOLO el id del usuario en la sesión (Menos memoria que guardar el objeto completo).
-    })
+    // Serializar usuario (solo guardar el ID para evitar problemas de memoria)
+    passport.serializeUser((user, done) => {
+        done(null, user._id); // Guarda solo el ID del usuario
+    });
 
-    passport.deserializeUser(async (id, done)=>{
-        let user = await userModel.findById(id) //Busca el user
-        done(null, user) //Guarda el usuario para poder tener acceso al mismo desde req.user
-    })
+    // Deserializar usuario (recuperar el usuario de la base de datos por ID)
+    passport.deserializeUser(async (id, done) => {
+        let user = await userModel.findById(id); // Busca el usuario por su ID
+        done(null, user); // Devuelve el usuario completo a req.user
+    });
 
+    // Estrategia JWT para rutas protegidas
     passport.use('jwt', new JWTEstrategy({
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]), //Extrae el JWT de la cookie
-        secretOrKey: process.env.JWT_SECRET
-    }, async(jwt_payload, done)=>{
+        jwtFromRequest: JWTExtract.fromExtractors([cookieExtractor]), // Extrae el JWT de los headers
+        secretOrKey: process.env.JWT_SECRET, // Usar la misma clave secreta para la verificación
+    }, async (jwt_payload, done) => {
         try {
-            return done(null, jwt_payload)
+            // Si el JWT es válido, lo pasa al siguiente middleware
+            return done(null, jwt_payload);
         } catch (e) {
-            return done(e)
+            return done(e); // Manejo de errores
         }
-    }))
-}
+    }));
+};
 
-export default initializePassport
+export default initializePassport;

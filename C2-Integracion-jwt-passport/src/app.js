@@ -8,7 +8,6 @@ import connectionDataBase from '../../C2-Proteccion-pswd-estrategia-autenticacio
 import initializePassport from './config/passport.config.js';
 import jwtRouter from './routes/jwtImplement.routes.js';
 
-
 dotenv.config();
 
 const app = express();
@@ -31,11 +30,9 @@ app.use(session({ //Maneja las sesiones
     cookie: { 
         maxAge: 60 * 60 * 1000, 
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Solo en HTTPS si es producción
-        sameSite: 'Strict', // Protege contra CSRF
     },
-    resave: false, // Solo lo guardamos si se modifica, optimización
-    saveUninitialized: false, // Evitamos guardar sesiones vacías
+    resave: true,
+    saveUninitialized: true, 
 }));
 
 initializePassport()
@@ -44,6 +41,7 @@ app.use(passport.session())
 
 
 app.use('/api/jwt', jwtRouter)
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}/`);

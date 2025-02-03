@@ -1,5 +1,8 @@
 import userModel from "../models/user.model.js";
 import {isValidPassword} from '../utils/configPassword.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export const register = (req, res)=>{
     res.send({ status: 'success', message: 'User registered' });
@@ -9,7 +12,7 @@ export const jwtLogin = async(req, res)=>{
     const {email, password} = req.body;
     
     try {
-        const user = await userModel.findOne({email})
+        const user = await userModel.findOne({email: email})
 
         if(!user){
             return res.status(401).json({ message: "Usuario no encontrado" });
