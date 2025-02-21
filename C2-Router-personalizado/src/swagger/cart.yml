@@ -1,0 +1,396 @@
+components:
+  schemas:
+    SimpleCart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The auto-generated MongoDB ObjectId
+          example: "507f1f77bcf86cd799439011"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              prodId:
+                type: string
+                example: "507f1f77bcf86cd799439012"
+              quantity:
+                type: number
+                example: 2
+    PopulatedCart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The auto-generated MongoDB ObjectId
+          example: "507f1f77bcf86cd799439011"
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              prodId:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "507f1f77bcf86cd799439012"
+                  title:
+                    type: string
+                    example: "iPhone 14"
+                  description:
+                    type: string
+                    example: "Latest generation smartphone"
+                  code:
+                    type: string
+                    example: "IPHONE14-128GB"
+                  price:
+                    type: number
+                    example: 999.99
+                  status:
+                    type: boolean
+                    example: true
+                  stock:
+                    type: number
+                    example: 50
+                  category:
+                    type: string
+                    example: "Electronics"
+              quantity:
+                type: number
+                example: 2
+
+tags:
+  - name: Cart
+    description: API for managing products in cart
+
+paths:
+  /api/carts:
+    get:
+      summary: Get all carts (Only for testing)
+      tags: [Cart]
+      responses:
+        200:
+          description: Carts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SimpleCart'
+                  message:
+                    type: string
+                    example: Carts obtained successfully
+        500:
+          description: Internal server error
+
+    post:
+      summary: Create a new cart
+      tags: [Cart]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      prodId:
+                        type: string
+                        example: "507f1f77bcf86cd799439012"
+                      quantity:
+                        type: number
+                        example: 1
+      responses:
+        201:
+          description: Cart created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/SimpleCart'
+                  message:
+                    type: string
+                    example: "Cart created successfully with id: 507f1f77bcf86cd799439011"
+        400:
+          description: Invalid request body
+        500:
+          description: Internal server error
+
+  /api/carts/{cid}:
+    get:
+      summary: Get a cart by ID with populated products
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: Cart ID
+          example: "507f1f77bcf86cd799439011"
+      responses:
+        200:
+          description: Cart found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/PopulatedCart'
+                  message:
+                    type: string
+                    example: Cart found
+        404:
+          description: Cart not found
+        500:
+          description: Internal server error
+
+    put:
+      summary: Update all products in a cart
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: Cart ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - prodId
+                  - quantity
+                properties:
+                  prodId:
+                    type: string
+                    example: "507f1f77bcf86cd799439012"
+                  quantity:
+                    type: number
+                    example: 2
+      responses:
+        200:
+          description: Cart products updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: The products of the cart has been updated
+                  payload:
+                    $ref: '#/components/schemas/SimpleCart'
+        400:
+          description: Invalid request body
+        404:
+          description: Cart not found
+        500:
+          description: Internal server error
+
+    delete:
+      summary: Remove all products from cart
+      tags: [Cart]
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          schema:
+            type: string
+          description: Cart ID
+      responses:
+        200:
+          description: Cart emptied successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/SimpleCart'
+                  message:
+                    type: string
+                    example: "The cart has been emptied"
+        400:
+          description: Invalid cart ID
+        404:
+          description: Cart not found
+        500:
+          description: Internal server error
+
+
+
+/api/carts/{cid}/product/{pid}:
+  post:
+    summary: Add a product to cart or update its quantity
+    tags: [Cart]
+    parameters:
+      - in: path
+        name: cid
+        required: true
+        schema:
+          type: string
+        description: Cart ID
+      - in: path
+        name: pid
+        required: true
+        schema:
+          type: string
+        description: Product ID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - quantity
+            properties:
+              quantity:
+                type: number
+                example: 2
+    responses:
+      200:
+        description: Product added/updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: success
+                message:
+                  type: string
+                  example: Cart updated successfully
+                payload:
+                  $ref: '#/components/schemas/PopulatedCart'
+      400:
+        description: Invalid request
+      404:
+        description: Cart or product not found
+      500:
+        description: Internal server error
+
+  put:
+    summary: Modify the quantity of a specific product in cart
+    tags: [Cart]
+    parameters:
+      - in: path
+        name: cid
+        required: true
+        schema:
+          type: string
+        description: Cart ID
+      - in: path
+        name: pid
+        required: true
+        schema:
+          type: string
+        description: Product ID
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - quantity
+            properties:
+              quantity:
+                type: number
+                description: New quantity for the product
+                example: 5
+    responses:
+      200:
+        description: Product quantity updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: success
+                message:
+                  type: string
+                  example: "Product quantity updated successfully"
+                payload:
+                  $ref: '#/components/schemas/PopulatedCart'
+      400:
+        description: Invalid request
+      404:
+        description: Cart or product not found
+      500:
+        description: Internal server error
+
+  delete:
+    summary: Remove a product from cart
+    tags: [Cart]
+    parameters:
+      - in: path
+        name: cid
+        required: true
+        schema:
+          type: string
+        description: Cart ID
+      - in: path
+        name: pid
+        required: true
+        schema:
+          type: string
+        description: Product ID
+    responses:
+      200:
+        description: Product removed successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: success
+                payload:
+                  $ref: '#/components/schemas/SimpleCart'
+                message:
+                  type: string
+                  example: "The product has been removed"
+      400:
+        description: Invalid request
+      404:
+        description: Cart or product not found
+      500:
+        description: Internal server error
