@@ -14,6 +14,8 @@ export default class UserCustomRouter extends Router{
         this.get('/private', ['USER', 'ADMIN'], userController.validationUserWithInfo)
 
         this.get('/admin', ['ADMIN'], userController.validationUserWithInfo)
+        
+        this.post('/logout', ['USER', 'ADMIN'], userController.logout)
     }
 }
 
